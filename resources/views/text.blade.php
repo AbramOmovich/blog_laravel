@@ -1,4 +1,8 @@
 @extends('Main')
 @section('text-greet')
-  {{$text}}
+    @foreach($articles as $article)
+        <h3>{{$article->title}}</h3>
+        <p></p>
+    @endforeach
+
   @endsection
