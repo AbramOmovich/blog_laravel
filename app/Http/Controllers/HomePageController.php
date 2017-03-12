@@ -11,11 +11,10 @@ class HomePageController extends Controller
 {
 
    public function index(){
-
        $articles = DB::table('articles');
+       $articles = $articles->orderBy('created','desc')->get();
 
-
-      return view('text',['head' => 'Главная страниа', 'articles' => $articles->get()]);
+       return view('articles',['articles' => $articles]);
 
    }
 }

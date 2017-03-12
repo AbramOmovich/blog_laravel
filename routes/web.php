@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', 'HomePageController@index');
+Route::get('/', 'HomePageController@index')->name('Home');
 
 
 Route::get('hello-{user}-{age}',function ($user,$age)
@@ -17,3 +17,5 @@ Route::group(['prefix' => 'admin'], function($r){
     $r->get('dashboard', function(){return 'dashboard';});
     $r->get('money-history', function(){return 'money-history';});
 });
+
+Route::get('article/{slug}','ArticleController@index');

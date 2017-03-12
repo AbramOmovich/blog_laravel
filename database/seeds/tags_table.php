@@ -20,8 +20,9 @@ class tags_table extends Seeder
 
         $this->faker = Faker\Factory::create();
 
-        for($i = 0; $i < 50; $i++){
-            $db->insert(['title' => $this->faker->word, 'slug'=> $this->faker->slug]);
+        for($i = 0; $i < 10; $i++){
+            $word = $this->faker->word;
+            $db->insert(['title' => $word, 'slug'=> str_slug($word)]);
         }
 
     }
