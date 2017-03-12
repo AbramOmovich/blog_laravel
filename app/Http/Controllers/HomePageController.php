@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\article;
 use DB;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -11,8 +12,8 @@ class HomePageController extends Controller
 {
 
    public function index(){
-       $articles = DB::table('articles');
-       $articles = $articles->orderBy('created','desc')->get();
+
+       $articles = article::LatestArticles();
 
        return view('articles',['articles' => $articles]);
 
