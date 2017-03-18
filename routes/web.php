@@ -1,16 +1,8 @@
 <?php
 
 Route::get('/', 'HomePageController@index')->name('Home');
+Route::get('/{message}-{class}','HomePageController@index')->name('postHome');
 
-
-Route::get('hello-{user}-{age}',function ($user,$age)
-{
-    return 'Hello '. ucfirst($user). ' of age ' . $age;}
-)->where([
-    'user' => '\w{2,7}',
-    'age' => '\d{2,3}'
-
-]);
 
 Route::group(['prefix' => 'admin'], function($r){
     $r->get('user', function(){return 'users';});
@@ -18,4 +10,18 @@ Route::group(['prefix' => 'admin'], function($r){
     $r->get('money-history', function(){return 'money-history';});
 });
 
-Route::get('article/{slug}','ArticleController@index');
+Route::group(['prefix' => 'article'],function($route){
+    $route->group(['prefix' => '{slug}'],function($slugRoute){
+        $slugRoute->get('/','ArticleController@index')->name('article');
+        $slugRoute->post('edit', 'ArticleController@edit');
+        $slugRoute->post('delete', 'ArticleController@delete');
+    });
+
+
+
+});
+
+Route::group(['prefix' => 'add'], function($route){
+    $route->get('/','ArticleController@add');
+    $route->post('/','ArticleController@publish');
+});

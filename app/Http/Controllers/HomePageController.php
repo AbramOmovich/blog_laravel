@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\article;
+use App\Article;
 use DB;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -11,11 +11,15 @@ use Illuminate\Http\Request;
 class HomePageController extends Controller
 {
 
-   public function index(){
+   public function index($message = '',$class = ''){
 
-       $articles = article::LatestArticles();
+       $articles = Article::LatestArticles();
 
-       return view('articles',['articles' => $articles]);
-
+       if($message){
+           return view('articles',['articles' => $articles,'message' => $message , 'class' => $class]);
+       }
+       else{
+           return view('articles',['articles' => $articles]);
+       }
    }
 }

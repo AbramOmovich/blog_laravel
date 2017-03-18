@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Blog Template for Bootstrap</title>
+  <title>@yield('title','Как-бы блог')</title>
 
   <!-- Bootstrap core CSS -->
   <link href="/public/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,8 @@
       <a class="blog-nav-item" href="#">Press</a>
       <a class="blog-nav-item" href="#">New hires</a>
       <a class="blog-nav-item" href="#">About</a>
-    </nav>
+        <a class="blog-nav-item navbar-right" href="/add">Добавить новость</a>
+      </nav>
   </div>
 </div>
 
@@ -38,7 +39,7 @@
 
   <div class="blog-header">
       @if(Route::currentRouteName() != 'Home')
-        <a href="/"><h1 class="blog-title">Как-бы блог</h1></a>
+        <a href="/" style="text-decoration: none"><h1 class="blog-title" >Как-бы блог</h1></a>
       @else
           <h1 class="blog-title">Как-бы блог</h1>
       @endif
@@ -49,15 +50,11 @@
 
     <div class="col-sm-8 blog-main">
 
+      @yield('message')
       @yield('Posts')
 
         @if ( Route::currentRouteName() == 'Home')
-          <nav>
-            <ul class="pager">
-              <li><a href="#">Previous</a></li>
-              <li><a href="#">Next</a></li>
-            </ul>
-          </nav>
+         @yield('Pagination')
         @endif
 
     </div><!-- /.blog-main -->

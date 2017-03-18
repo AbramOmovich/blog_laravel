@@ -4,9 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class article extends Model
+class Article extends Model
 {
+    public $timestamps = true;
+
     public function scopeLatestArticles($builder){
-        return $builder->orderBy('created','desc')->get();
+        return $builder->orderBy('created_at','desc')->paginate(10);
     }
 }

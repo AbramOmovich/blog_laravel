@@ -17,8 +17,8 @@ class CreateArticlesTable extends Migration
             $table->increments('id');
             $table->string('title',250)->nullable();
             $table->string('slug',250)->nullable();
-            $table->dateTime('created')->nullable();
-            $table->dateTime('updated')->nullable();
+            $table->dateTime('created_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
             $table->text('short_descr')->nullable();
             $table->text('body')->nullable();
 

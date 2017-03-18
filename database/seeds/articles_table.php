@@ -25,9 +25,9 @@ class articles_table extends Seeder
             $values ['slug'] = str_slug($values['title']);
             $values ['body'] = $this->faker->realText(3000);
             $values ['short_descr']= str_limit($values['body'],300);
-            $values ['created']= $this->faker->dateTimeBetween('-1 years');
-            $values ['updated'] = clone $values['created'];
-            $values ['updated']->add($values['created']->diff(new $this->faker->dateTimeBetween('-1 years'),true));
+            $values ['created_at']= $this->faker->dateTimeBetween('-1 years');
+            $values ['updated_at'] = clone $values['created_at'];
+            $values ['updated_at']->add($values['created_at']->diff(new $this->faker->dateTimeBetween('-1 years'),true));
 
             $db->insert($values);
         }
