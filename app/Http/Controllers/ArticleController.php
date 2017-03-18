@@ -13,10 +13,8 @@ use Route;
 
 class ArticleController extends Controller
 {
-    private $db;
 
     public function index($slug){
-        $db = DB::table('articles');
 
         return view('article', ['article' => Article::where('slug',$slug)->get()->first()]);
     }
@@ -26,7 +24,12 @@ class ArticleController extends Controller
     }
 
     public function publish(Request $request){
-        if(!$request->has('title') && !$request->has('body'))return Redirect::back();
+
+       $validator = \Validator::make($request->all(),[
+          'title' => 'required|min:3|max:200',
+           'body' => 'required|min:3|',
+
+       ]);
 
         $article = new Article();
 
@@ -35,9 +38,31 @@ class ArticleController extends Controller
         $article->slug = str_slug($article->title);
         $article->short_descr = str_limit($article->body);
 
-        $article->save();
+        $validator->validate($article,[
+            'slug' => 'unique:articles,slug'
+        ]);
 
-        return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
+        if($validator->fails()){
+            dump($validator->errors()->all());
+        }
+
+        else {
+            $article->save();
+            return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
+        }
+
+        /*if(!$request->has('title') && !$request->has('body'))return Redirect::back();
+
+        $article = new Article();
+
+        $article->title = trim(strip_tags( $request->title));
+        $article->body = $request->body;
+        $article->slug = str_slug($article->title);
+        $article->short_descr = str_limit($article->body);
+
+
+
+        return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);*/
     }
 
     /**
