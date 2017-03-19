@@ -14,6 +14,13 @@ use Route;
 class ArticleController extends Controller
 {
 
+    private static $messages = [
+        'title.required' => 'Не введен заголовок',
+        'body.required'  => 'Не введен текст новости',
+        'title.min' => 'Заголовок должен быть больше :min символов',
+        'slug.unique' => 'Придумайте другой заголовок'
+    ];
+
     public function index($slug){
 
         return view('article', ['article' => Article::where('slug',$slug)->get()->first()]);
@@ -23,57 +30,39 @@ class ArticleController extends Controller
         return view('addArticle');
     }
 
+    private function article_validate(array $data){
+        return \Validator::make($data,[
+            'title' => 'required|min:3|max:200',
+            'body' => 'required|min:3|',
+            'slug' => 'unique:articles'
+
+        ],self::$messages);
+    }
+
     public function publish(Request $request){
+        $data = $request->all();
+        $data['slug'] = str_slug($data['title']);
 
-       $validator = \Validator::make($request->all(),[
-          'title' => 'required|min:3|max:200',
-           'body' => 'required|min:3|',
-
-       ]);
-
-        $article = new Article();
-
-        $article->title = trim(strip_tags( $request->title));
-        $article->body = $request->body;
-        $article->slug = str_slug($article->title);
-        $article->short_descr = str_limit($article->body);
-
-        $validator->validate($article,[
-            'slug' => 'unique:articles,slug'
-        ]);
+        $validator = $this->article_validate($data);
 
         if($validator->fails()){
-            dump($validator->errors()->all());
+            return redirect()->route('add')->withErrors($validator)->withInput();
         }
-
         else {
+            $article = new Article();
+
+            $article->title = trim(strip_tags( $request->title));
+            $article->body = $request->body;
+            $article->slug = str_slug($article->title);
+            $article->short_descr = str_limit($article->body);
             $article->save();
             return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
         }
-
-        /*if(!$request->has('title') && !$request->has('body'))return Redirect::back();
-
-        $article = new Article();
-
-        $article->title = trim(strip_tags( $request->title));
-        $article->body = $request->body;
-        $article->slug = str_slug($article->title);
-        $article->short_descr = str_limit($article->body);
-
-
-
-        return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);*/
     }
 
     /**
      * @param string $text
-     * @param string $class - type of message
-     *          active	Applies the hover color to a particular row or cell
-                success	Indicates a successful or positive action
-                info	Indicates a neutral informative change or action
-                warning	Indicates a warning that might need attention
-                danger Indicates a dangerous or potentially negative action
-     *
+     * @param string $class - type of message (active, success, info, warning, danger)
      * @return array
      */
     private function message($text = '', $class = 'warning'){
@@ -82,21 +71,45 @@ class ArticleController extends Controller
         return $message;
     }
 
-    public function edit($slug, Request $request){
+
+
+    public function getArticle($slug, Request $request){
+        if($request->method() == 'POST'){
+            $article = Article::where('slug',$slug)->get()->first();
+            return view('editor',['article' => $article]);
+        }
+        else return view('editor');
+    }
+
+    public function putArticle($slug, Request $request){
 
         $article = Article::where('slug',$slug)->get()->first();
 
-        if($request->has('set')){
-            
-            $article->title = $request->title;
-            $slug = $article->slug = str_slug($article->title);
-            $article->body = $request->body;
+        $validator = \Validator::make($request->all(),[
+            'title' => 'required|min:3|max:200',
+            'body' => 'required|min:3|',],self::$messages);
+
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        else{
+            $data = $request->all();
+            $data['slug'] = str_slug($data['title']);
+            if($data['slug'] !== $article->slug){
+                $validator = $this->article_validate($data);
+            }
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            $article->title = $data['title'];
+            $article->slug = $data['slug'];
+            $article->body = $data['body'];
             $article->short_descr = str_limit($article->body);
             $article->save();
-            return redirect()->route('article',['slug' => $slug]);
+            return redirect()->route('article',['slug' =>  $article->slug]);
         }
-
-        return view('addArticle',['title' => $article->title, 'body' => $article->body]);
     }
 
     public function delete($slug){

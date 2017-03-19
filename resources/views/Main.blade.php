@@ -30,7 +30,6 @@
       <a class="blog-nav-item" href="#">Press</a>
       <a class="blog-nav-item" href="#">New hires</a>
       <a class="blog-nav-item" href="#">About</a>
-        <a class="blog-nav-item navbar-right" href="/add">Добавить новость</a>
       </nav>
   </div>
 </div>
@@ -44,10 +43,12 @@
           <h1 class="blog-title">Как-бы блог</h1>
       @endif
     <p class="lead blog-description">Блог для практики по шаблонизатору</p>
+        <div class="col-sm-3 pull-right">
+
+        </div>
   </div>
 
   <div class="row">
-
     <div class="col-sm-8 blog-main">
 
       @yield('message')
@@ -60,6 +61,10 @@
     </div><!-- /.blog-main -->
 
     <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+      <div class="sidebar-module">
+        @yield('sidebar')
+      </div>
+
       <div class="sidebar-module sidebar-module-inset">
         <h4>About</h4>
         <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>

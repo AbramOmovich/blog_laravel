@@ -11,17 +11,15 @@ Route::group(['prefix' => 'admin'], function($r){
 });
 
 Route::group(['prefix' => 'article'],function($route){
+    $route->group(['prefix' => 'add'], function($route){
+        $route->get('/','ArticleController@add')->name('add');
+        $route->post('/','ArticleController@publish');
+    });
     $route->group(['prefix' => '{slug}'],function($slugRoute){
         $slugRoute->get('/','ArticleController@index')->name('article');
-        $slugRoute->post('edit', 'ArticleController@edit');
+        $slugRoute->post('edit', 'ArticleController@getArticle');
+        $slugRoute->get('edit', 'ArticleController@getArticle');
+        $slugRoute->put('edit', 'ArticleController@putArticle');
         $slugRoute->post('delete', 'ArticleController@delete');
     });
-
-
-
-});
-
-Route::group(['prefix' => 'add'], function($route){
-    $route->get('/','ArticleController@add');
-    $route->post('/','ArticleController@publish');
 });
