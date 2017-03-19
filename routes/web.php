@@ -1,7 +1,7 @@
 <?php
 
-Route::get('/', 'HomePageController@index')->name('Home');
-Route::get('/{message}-{class}','HomePageController@index')->name('postHome');
+Route::get('/', 'NewsController@index')->name('Home');
+Route::get('/{message}-{class}','NewsController@index')->name('postHome');
 
 
 Route::group(['prefix' => 'admin'], function($r){
@@ -23,3 +23,7 @@ Route::group(['prefix' => 'article'],function($route){
         $slugRoute->post('delete', 'ArticleController@delete');
     });
 });
+Auth::routes();
+
+
+Route::get('/home', 'HomeController@index');

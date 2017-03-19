@@ -30,6 +30,8 @@
       <a class="blog-nav-item" href="#">Press</a>
       <a class="blog-nav-item" href="#">New hires</a>
       <a class="blog-nav-item" href="#">About</a>
+      <a class="blog-nav-item pull-right" href="{{ route('login') }}">Войти</a>
+      <a class="blog-nav-item pull-right" href="{{ route('register') }}">Регистрация</a>
       </nav>
   </div>
 </div>

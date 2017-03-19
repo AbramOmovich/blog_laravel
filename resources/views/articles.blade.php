@@ -13,7 +13,7 @@
                 <a href="/article/{{$article->slug}}">
                     <h2 class="blog-post-title">{{ $article->title }}</h2>
                 </a>
-                <p class="blog-post-meta">{{ (new DateTime($article['created_at']))->format('F d, Y') }} by <a href="">Abram</a></p>
+                <p class="blog-post-meta">{{ (new DateTime($article['created_at']))->format('F d, Y') }} by <a href="">{{ Auth::user()->name }}</a></p>
                 {{ $article['short_descr'] }}
             </div>
         @endforeach

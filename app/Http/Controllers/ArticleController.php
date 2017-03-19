@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\User;
 use Faker\Provider\cs_CZ\DateTime;
 use Illuminate\Http\Request;
 use DB;
@@ -40,24 +41,31 @@ class ArticleController extends Controller
     }
 
     public function publish(Request $request){
-        $data = $request->all();
-        $data['slug'] = str_slug($data['title']);
+        if (\Auth::check()){
+            $data = $request->all();
+            $data['slug'] = str_slug($data['title']);
 
-        $validator = $this->article_validate($data);
+            $validator = $this->article_validate($data);
 
-        if($validator->fails()){
-            return redirect()->route('add')->withErrors($validator)->withInput();
+            if($validator->fails()){
+                return redirect()->route('add')->withErrors($validator)->withInput();
+            }
+            else {
+
+
+                $article = new Article();
+
+                $article->title = trim(strip_tags( $request->title));
+                $article->body = $request->body;
+                $article->slug = str_slug($article->title);
+                $article->short_descr = str_limit($article->body);
+                $article->user_id = \Auth::id();
+                $article->save();
+                return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
+            }
         }
-        else {
-            $article = new Article();
 
-            $article->title = trim(strip_tags( $request->title));
-            $article->body = $request->body;
-            $article->slug = str_slug($article->title);
-            $article->short_descr = str_limit($article->body);
-            $article->save();
-            return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
-        }
+
     }
 
     /**
