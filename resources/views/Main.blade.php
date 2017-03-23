@@ -25,13 +25,24 @@
 <div class="blog-masthead">
   <div class="container">
     <nav class="blog-nav">
-      <a class="blog-nav-item active" href="/">Home</a>
+      <a class="blog-nav-item
+      @if(Route::is('Home')) {{ 'active' }} @endif"
+         href="/">Home</a>
       <a class="blog-nav-item"  href="#">New features</a>
       <a class="blog-nav-item" href="#">Press</a>
       <a class="blog-nav-item" href="#">New hires</a>
       <a class="blog-nav-item" href="#">About</a>
-      <a class="blog-nav-item pull-right" href="{{ route('login') }}">Войти</a>
-      <a class="blog-nav-item pull-right" href="{{ route('register') }}">Регистрация</a>
+      <!-- Authentication Links -->
+      @if (Auth::guest())
+        <a class="blog-nav-item pull-right" href="{{ route('login') }}">Войти</a>
+        <a class="blog-nav-item pull-right" href="{{ route('register') }}">Регистрация</a>
+      @else
+        <a class="blog-nav-item pull-right" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">{{ Auth::user()->name }} (Выйти)</a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+              </form>
+      @endif
       </nav>
   </div>
 </div>

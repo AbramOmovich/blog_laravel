@@ -51,8 +51,6 @@ class ArticleController extends Controller
                 return redirect()->route('add')->withErrors($validator)->withInput();
             }
             else {
-
-
                 $article = new Article();
 
                 $article->title = trim(strip_tags( $request->title));
