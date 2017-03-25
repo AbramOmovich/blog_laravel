@@ -1,14 +1,16 @@
 @extends('Main')
 @section('title')
-        {{ "Добавить новость" }}
+       Добавить новость
 @endsection
 
 @section('message')
     @if ($errors->has('slug'))
-        <p class="bg-danger">{{ $errors->first('slug') }}</p>
+        <div class="alert alert-danger">
+            {{ $errors->first('slug') }}
+        </div>
     @endif
     @if(isset($message))
-        <p class="{{$message['class']}}">{{ $message['text'] }}</p>
+        <div class="alert {{$message['class']}}">{{ $message['text'] }}</div>
     @endif
 @endsection
 
@@ -30,8 +32,14 @@
                 <textarea name="body" id="body" cols="30" rows="10" class="form-control">{{ old('body') }}</textarea>
             </div>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
             @foreach(\App\Tag::all() as $tag )
-                <input type="checkbox" name="tags[]" value="{{ $tag->id }}">{{ $tag->title }}<br>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                        {{ $tag->title }}
+                    </label>
+                </div>
             @endforeach
             <br>
             <button type="submit" class="btn btn-default">Опубликовать</button>

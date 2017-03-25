@@ -20,8 +20,6 @@ Route::get('register','Auth\RegisterController@showRegistrationForm')->name('reg
 Route::post('register','Auth\RegisterController@register');
 
 
-
-
 Route::group(['prefix' => 'article'],function($route){
     $route->group(['prefix' => 'add'], function($route){
         $route->get('/','ArticleController@add')->name('add');
@@ -30,14 +28,7 @@ Route::group(['prefix' => 'article'],function($route){
     $route->group(['prefix' => '{slug}'],function($slugRoute){
         $slugRoute->get('/','ArticleController@index')->name('article');
         $slugRoute->post('edit', 'ArticleController@getArticle');
-        $slugRoute->get('edit', 'ArticleController@getArticle');
         $slugRoute->put('edit', 'ArticleController@putArticle');
         $slugRoute->post('delete', 'ArticleController@delete');
     });
 });
-
-
-//Auth::routes();
-
-
-Route::get('/home', 'HomeController@index');

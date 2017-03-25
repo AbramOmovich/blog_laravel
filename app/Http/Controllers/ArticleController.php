@@ -8,6 +8,7 @@ use Faker\Provider\cs_CZ\DateTime;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Route;
 
@@ -28,7 +29,12 @@ class ArticleController extends Controller
     }
 
     public function add(){
-        return view('addArticle');
+        if(Auth::check()) {
+            return view('addArticle');
+        }
+        else{
+            return redirect()->route('Home');
+        }
     }
 
     private function article_validate(array $data){
@@ -59,12 +65,15 @@ class ArticleController extends Controller
                 $article->short_descr = str_limit($article->body);
                 $article->user_id = \Auth::id();
                 $article->save();
-                $article->tags()->attach($data['tags']);
+                if(isset($data['tags'])) {
+                    $article->tags()->attach($data['tags']);
+                }
                 return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
             }
         }
-
-
+        else{
+            return redirect()->route('Home');
+        }
     }
 
     /**
@@ -81,48 +90,64 @@ class ArticleController extends Controller
 
 
     public function getArticle($slug, Request $request){
-        if($request->method() == 'POST'){
+        if(Auth::check()) {
             $article = Article::where('slug',$slug)->get()->first();
             return view('editor',['article' => $article]);
         }
-        else return view('editor');
+        else{
+            return redirect()->route('Home');
+        }
     }
 
     public function putArticle($slug, Request $request){
+        if(Auth::check()) {
+            $article = Article::where('slug',$slug)->get()->first();
 
-        $article = Article::where('slug',$slug)->get()->first();
-
-        $validator = \Validator::make($request->all(),[
-            'title' => 'required|min:3|max:200',
-            'body' => 'required|min:3|',],self::$messages);
-
-        if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        else{
-            $data = $request->all();
-            $data['slug'] = str_slug($data['title']);
-            if($data['slug'] !== $article->slug){
-                $validator = $this->article_validate($data);
-            }
+            $validator = \Validator::make($request->all(),[
+                'title' => 'required|min:3|max:200',
+                'body' => 'required|min:3|',],self::$messages);
 
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator)->withInput();
             }
+            else{
+                $data = $request->all();
+                $data['slug'] = str_slug($data['title']);
+                if($data['slug'] !== $article->slug){
+                    $validator = $this->article_validate($data);
+                }
 
-            $article->title = $data['title'];
-            $article->slug = $data['slug'];
-            $article->body = $data['body'];
-            $article->short_descr = str_limit($article->body);
-            $article->save();
-            $article->tags()->sync($data['tags']);
-            return redirect()->route('article',['slug' =>  $article->slug]);
+                if($validator->fails()){
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+
+                $article->title = $data['title'];
+                $article->slug = $data['slug'];
+                $article->body = $data['body'];
+                $article->short_descr = str_limit($article->body);
+                $article->save();
+                if(!isset($data['tags'])){
+                    $article->tags()->detach();
+                }
+                else{
+                    $article->tags()->sync($data['tags']);
+                }
+                return redirect()->route('article',['slug' =>  $article->slug]);
+            }
+        }
+        else{
+            return redirect()->route('Home');
         }
     }
 
     public function delete($slug){
-        Article::where('slug',$slug)->delete();
-        $message = $this->message('Новость удалена');
-        return redirect()->route('postHome',['message' => $message['text'], 'class' => $message['class']]);
+        if(Auth::check()) {
+            Article::where('slug',$slug)->delete();
+            $message = $this->message('Новость удалена');
+            return redirect()->route('postHome',['message' => $message['text'], 'class' => $message['class']]);
+        }
+        else{
+            return redirect()->route('Home');
+        }
     }
 }

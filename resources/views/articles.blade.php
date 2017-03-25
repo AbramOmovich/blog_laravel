@@ -2,10 +2,16 @@
 
 @if(isset($message))
     @section('message')
-        <p  class="{{ $class }} ">{{ $message }}</p>
+        <div class="alert {{ $class }} ">{{ $message }}</div>
     @endsection
 @endif
 
+@if(isset($tag))
+    @section('Tag')
+        <blockquote class="blockquote-reverse"><h3>{{ $tag }}</h3></blockquote>
+        <hr>
+    @endsection
+@endif
 @section('Posts')
     @if (isset($articles))
         @foreach($articles as $article )
@@ -30,8 +36,6 @@
 
 @section('sidebar')
     @if(!Auth::guest())
-    <form action="{{ route('add') }}">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Добавить новость</button>
-    </form>
+        <a href="{{ route('add') }}" class="btn btn-primary btn-lg btn-block">Добавить новость</a>
     @endif
 @endsection

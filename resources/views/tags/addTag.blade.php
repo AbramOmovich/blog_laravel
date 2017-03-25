@@ -5,10 +5,10 @@
 
 @section('message')
     @if ($errors->has('slug'))
-        <p class="bg-danger">{{ $errors->first('slug') }}</p>
+        <div class="alert alert-danger">{{ $errors->first('slug') }}</div>
     @endif
     @if(isset($message))
-        <p class="{{$message['class']}}">{{ $message['text'] }}</p>
+        <div class="alert {{$message['class']}}">{{ $message['text'] }}</div>
     @endif
 @endsection
 

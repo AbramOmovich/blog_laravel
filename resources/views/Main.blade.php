@@ -37,8 +37,15 @@
         <a class="blog-nav-item pull-right" href="{{ route('login') }}">Войти</a>
         <a class="blog-nav-item pull-right" href="{{ route('register') }}">Регистрация</a>
       @else
-        <a class="blog-nav-item pull-right" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">{{ Auth::user()->name }} (Выйти)</a>
+        <div class="btn-group pull-right">
+        <a class="blog-nav-item dropdown-toggle" href="#" id="userDrop" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}<span class="caret"></span></a>
+        <ul class="dropdown-menu" aria-labelledby="userDrop">
+          <li><a href="#">Профиль</a></li>
+          <li><a href="#">Мои новости</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выйти</a></li>
+        </ul>
+        </div>
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 {{ csrf_field() }}
               </form>
@@ -55,7 +62,7 @@
       @else
           <h1 class="blog-title">Как-бы блог</h1>
       @endif
-    <p class="lead blog-description">Блог для практики по шаблонизатору</p>
+    <p class="lead blog-description">Блог для практики</p>
         <div class="col-sm-3 pull-right">
 
         </div>
@@ -65,11 +72,10 @@
     <div class="col-sm-8 blog-main">
 
       @yield('message')
+      @yield('Tag')
       @yield('Posts')
 
-        @if ( Route::currentRouteName() == 'Home')
-         @yield('Pagination')
-        @endif
+      @yield('Pagination')
 
     </div><!-- /.blog-main -->
 

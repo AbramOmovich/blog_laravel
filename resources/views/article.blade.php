@@ -11,7 +11,7 @@
         {{ $article->body }}
         <br><br>
             @foreach($article->tags as $tags)
-            <a href="/tag/{{ $tags->slug }}" class="btn btn-default btn-xs">{{ $tags->title }}</a>
+            <a href="/tag/{{ $tags->slug }}" class="btn btn-default btn-sm">{{ $tags->title }}</a>
             @endforeach
     </div>
 @endsection

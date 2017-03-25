@@ -26,6 +26,7 @@ class articles_table extends Seeder
             $values ['created_at']= $this->faker->dateTimeBetween('-1 years');
             $values ['updated_at'] = clone $values['created_at'];
             $values ['updated_at']->add($values['created_at']->diff(new $this->faker->dateTimeBetween('-1 years'),true));
+            $values ['user_id'] = $this->faker->numberBetween(1,10);
 
             $db->insert($values);
         }
