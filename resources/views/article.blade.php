@@ -9,6 +9,10 @@
         <h2 class="blog-post-title">{{ $article->title }}</h2>
         <p class="blog-post-meta">{{ (new DateTime($article->created_at))->format('F d, Y') }} by <a href="http://twitter.com/{{ ( App\User::find($article->user_id))->name }}">{{ ( App\User::find($article->user_id))->name }}</a></p>
         {{ $article->body }}
+        <br><br>
+            @foreach($article->tags as $tags)
+            <a href="/tag/{{ $tags->slug }}" class="btn btn-default btn-xs">{{ $tags->title }}</a>
+            @endforeach
     </div>
 @endsection
 

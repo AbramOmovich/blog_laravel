@@ -11,4 +11,8 @@ class Article extends Model
     public function scopeLatestArticles($builder){
         return $builder->orderBy('created_at','desc')->paginate(10);
     }
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class);
+    }
 }

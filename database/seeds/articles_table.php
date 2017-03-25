@@ -15,8 +15,6 @@ class articles_table extends Seeder
     {
         $db = DB::table('articles');
 
-        $db->truncate();
-
         $this->faker = Faker\Factory::create();
 
         for($i = 0; $i < 50; $i++){

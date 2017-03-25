@@ -59,6 +59,7 @@ class ArticleController extends Controller
                 $article->short_descr = str_limit($article->body);
                 $article->user_id = \Auth::id();
                 $article->save();
+                $article->tags()->attach($data['tags']);
                 return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
             }
         }
@@ -114,6 +115,7 @@ class ArticleController extends Controller
             $article->body = $data['body'];
             $article->short_descr = str_limit($article->body);
             $article->save();
+            $article->tags()->sync($data['tags']);
             return redirect()->route('article',['slug' =>  $article->slug]);
         }
     }

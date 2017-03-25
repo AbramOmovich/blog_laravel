@@ -3,6 +3,12 @@
 Route::get('/', 'NewsController@index')->name('Home');
 Route::get('/{message}-{class}','NewsController@index')->name('postHome');
 
+Route::group(['prefix' => 'tag'], function ($route){
+    $route->get('add','TagController@AddTag');
+    $route->post('add','TagController@storeTag');
+    $route->get('{tag}','TagController@getByTag');
+});
+
 Route::match(['get','head'],'login','Auth\LoginController@showLoginForm')->name('login');
 Route::post('login','Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');

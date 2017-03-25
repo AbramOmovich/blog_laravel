@@ -16,8 +16,6 @@ class tags_table extends Seeder
     {
         $db = DB::table('tags');
 
-        $db->truncate();
-
         $this->faker = Faker\Factory::create();
 
         for($i = 0; $i < 10; $i++){
