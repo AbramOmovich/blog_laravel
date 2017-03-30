@@ -11,22 +11,24 @@
         {{ $article->body }}
         <br><br>
             @foreach($article->tags as $tags)
-            <a href="/tag/{{ $tags->slug }}" class="btn btn-default btn-sm">{{ $tags->title }}</a>
+            <a href="/tag/{{ $tags->slug }}" class="label label-info">{{ $tags->title }}</a>
             @endforeach
     </div>
 @endsection
 
 @section('sidebar')
-    @if(Auth::id() == $article->user_id)
-        <form action="{{ Request::url() }}/edit" method="post">
-            <button type="submit" class="btn btn-warning btn-lg btn-block"> Редактировать </button>
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        </form>
-        <br>
-        <form action="{{ Request::url() }}/delete" method="post">
-            <button type="submit" class="btn btn-danger btn-lg btn-block"> Удалить </button>
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        </form>
+    @if(Auth::check())
+        @if(Auth::id() == $article->user_id || Auth::user()->role == \App\User::ROLE_ADMIN)
+            <form action="{{ Request::url() }}/edit" method="post">
+                <button type="submit" class="btn btn-warning btn-lg btn-block"> Редактировать </button>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </form>
+            <br>
+            <form action="{{ Request::url() }}/delete" method="post">
+                <button type="submit" class="btn btn-danger btn-lg btn-block"> Удалить </button>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </form>
+        @endif
     @endif
 @endsection
 

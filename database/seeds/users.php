@@ -19,7 +19,7 @@ class users extends Seeder
 
             $values ['name']= $this->faker->name;
             $values ['email'] = $this->faker->email;
-            $values ['password'] = $this->faker->password;
+            $values ['password'] = bcrypt('123123');
 
             $db->insert($values);
         }

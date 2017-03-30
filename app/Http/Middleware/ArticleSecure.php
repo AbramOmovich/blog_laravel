@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 
 class ArticleSecure
@@ -15,8 +16,8 @@ class ArticleSecure
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->user() ){
-
+        if ($request->user()->role != User::ROLE_ADMIN || $request->user()->role != User::ROLE_MODERATOR ){
+            abort(403);
         }
 
 

@@ -1,5 +1,6 @@
 <?php
 
+
 Route::get('/', 'NewsController@index')->name('Home');
 Route::get('/{message}-{class}','NewsController@index')->name('postHome');
 

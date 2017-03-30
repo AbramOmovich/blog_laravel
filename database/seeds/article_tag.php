@@ -1,5 +1,7 @@
 <?php
 
+use App\Article;
+use App\Tag;
 use Illuminate\Database\Seeder;
 
 class article_tag extends Seeder
@@ -15,11 +17,19 @@ class article_tag extends Seeder
 
         $this->faker = Faker\Factory::create();
 
-        for($i = 0; $i < 150; $i++){
-            $values ['article_id'] = $this->faker->numberBetween(1,50);
-            $values ['tag_id'] = $this->faker->numberBetween(1,10);
+        $articles_ids = Article::all()->pluck('id')->toArray();
+        $tags_ids = Tag::all('id')->pluck('id')->toArray();
+        $numbOfTags = count($tags_ids);
 
-            $db->insert($values);
+        foreach($articles_ids as $articleId){
+            $randTags = array_rand(array_flip($tags_ids),$this->faker->numberBetween(2,$numbOfTags));
+            $values = [];
+            foreach($randTags as $tagsId){
+                $values ['article_id'] = $articleId;
+                $values ['tag_id'] = $tagsId;
+
+                $db->insert($values);
+            }
         }
     }
 }

@@ -90,17 +90,14 @@ class ArticleController extends Controller
 
 
     public function getArticle($slug, Request $request){
-        if(Auth::check()) {
-            $article = Article::where('slug',$slug)->get()->first();
-            return view('editor',['article' => $article]);
-        }
-        else{
-            return redirect()->route('Home');
-        }
+        $this->middleware('article');
+
+        $article = Article::where('slug',$slug)->get()->first();
+        return view('editor',['article' => $article]);
     }
 
     public function putArticle($slug, Request $request){
-        if(Auth::check()) {
+        $this->middleware('article');
             $article = Article::where('slug',$slug)->get()->first();
 
             $validator = \Validator::make($request->all(),[
@@ -134,20 +131,12 @@ class ArticleController extends Controller
                 }
                 return redirect()->route('article',['slug' =>  $article->slug]);
             }
-        }
-        else{
-            return redirect()->route('Home');
-        }
     }
 
     public function delete($slug){
-        if(Auth::check()) {
+        $this->middleware('article');
             Article::where('slug',$slug)->delete();
             $message = $this->message('Новость удалена');
             return redirect()->route('postHome',['message' => $message['text'], 'class' => $message['class']]);
-        }
-        else{
-            return redirect()->route('Home');
-        }
     }
 }
