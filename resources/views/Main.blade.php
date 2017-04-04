@@ -14,6 +14,7 @@
   <!-- Bootstrap core CSS -->
   <link href="/public/css/bootstrap.min.css" rel="stylesheet">
   <link href="/public/css/sweetalert.css" rel="stylesheet">
+  @yield('css')
 
   <!-- Custom styles for this template -->
   <link href="/public/css/blog.css" rel="stylesheet">
@@ -41,7 +42,7 @@
         <div class="btn-group pull-right">
         <a class="blog-nav-item dropdown-toggle" href="#" id="userDrop" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}<span class="caret"></span></a>
         <ul class="dropdown-menu" aria-labelledby="userDrop">
-          <li><a href="#">Профиль</a></li>
+          <li><a href="{{ route('user',['id' => Auth::id()]) }}">Профиль</a></li>
           <li><a href="#">Мои новости</a></li>
           <li role="separator" class="divider"></li>
           <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выйти</a></li>
@@ -137,5 +138,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/public/js/bootstrap.min.js"></script>
 <script src="/public/js/sweetalert.min.js"></script>
+@yield('script')
 </body>
 </html>

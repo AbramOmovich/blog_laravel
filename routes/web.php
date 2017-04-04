@@ -31,3 +31,8 @@ Route::group(['prefix' => 'article'],function($route){
         $slugRoute->post('delete', 'ArticleController@delete');
     });
 });
+
+Route::group(['prefix' => 'user', 'middleware' => 'auth'],function($route){
+    $route->get('/{id}', 'UserController@profile')->name('user');
+    $route->post('/{id}', 'UserController@editProfile')->name('editUser');
+});
