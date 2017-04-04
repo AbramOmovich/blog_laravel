@@ -47,7 +47,7 @@ class ArticleController extends Controller
     }
 
     public function publish(Request $request){
-        if (\Auth::check()){
+        if (Auth::check()){
             $data = $request->all();
             $data['slug'] = str_slug($data['title']);
 
@@ -63,12 +63,13 @@ class ArticleController extends Controller
                 $article->body = $request->body;
                 $article->slug = str_slug($article->title);
                 $article->short_descr = str_limit($article->body);
-                $article->user_id = \Auth::id();
+                $article->user_id = Auth::id();
                 $article->save();
                 if(isset($data['tags'])) {
                     $article->tags()->attach($data['tags']);
                 }
-                return view('addArticle', ['message' => $this->message('Новость успешно добавлена','success')]);
+                alert("Новость создана", "Нововсть {$article->title} успешно созданна");
+                return redirect()->route('article',['slug' => $article->slug]);
             }
         }
         else{
@@ -81,13 +82,6 @@ class ArticleController extends Controller
      * @param string $class - type of message (active, success, info, warning, danger)
      * @return array
      */
-    private function message($text = '', $class = 'warning'){
-        $message['text'] = $text;
-        $message['class'] = 'alert-'.$class;
-        return $message;
-    }
-
-
 
     public function getArticle($slug, Request $request){
         $this->middleware('article');
@@ -129,14 +123,18 @@ class ArticleController extends Controller
                 else{
                     $article->tags()->sync($data['tags']);
                 }
+                alert()->info("Новость изменена", "Новость {$article->title} успешно изменена");
                 return redirect()->route('article',['slug' =>  $article->slug]);
             }
     }
 
     public function delete($slug){
         $this->middleware('article');
-            Article::where('slug',$slug)->delete();
-            $message = $this->message('Новость удалена');
-            return redirect()->route('postHome',['message' => $message['text'], 'class' => $message['class']]);
+            $article = Article::where('slug',$slug)->first();
+
+            alert()->warning("Новость удалена", "Новость {$article->title} удалена из блога");
+            $article->delete();
+
+            return redirect()->route('Home');
     }
 }

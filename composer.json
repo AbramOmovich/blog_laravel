@@ -21,7 +21,10 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files":[
+            "app/functions/alert.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

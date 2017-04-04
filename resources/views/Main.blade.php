@@ -13,6 +13,7 @@
 
   <!-- Bootstrap core CSS -->
   <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/public/css/sweetalert.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="/public/css/blog.css" rel="stylesheet">
@@ -72,7 +73,10 @@
     <div class="col-sm-8 blog-main">
 
       @yield('message')
+      @include('helpers.alert')
+
       @yield('Tag')
+
       @yield('Posts')
 
       @yield('Pagination')
@@ -132,5 +136,6 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/sweetalert.min.js"></script>
 </body>
 </html>

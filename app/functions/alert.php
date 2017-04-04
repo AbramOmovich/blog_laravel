@@ -1,7 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Роман
- * Date: 04.04.2017
- * Time: 22:40
- */
+
+use App\Helpers\SweetAlert;
+
+function alert($title = '',$message = ''){
+
+    $alert = new SweetAlert();
+
+    if($title !== ''){
+        $alert->success($title,$message);
+    }
+
+    return $alert;
+}

@@ -1,15 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Роман
- * Date: 04.04.2017
- * Time: 22:13
- */
 
 namespace App\Helpers;
 
 
 class SweetAlert
 {
+    private function alert($title, $message, $type){
+        session()->flash('alert', array(
+            'title' => $title,
+            'message' => $message,
+            'type' => $type
+        ));
+
+    }
+
+    function __call($type, $arguments)
+    {
+        $this->alert($arguments[0],$arguments[1],$type);
+    }
 
 }
